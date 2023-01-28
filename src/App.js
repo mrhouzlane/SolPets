@@ -18,7 +18,7 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import Home from './components/home';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -52,16 +52,16 @@ function App() {
 
   const { register, handleSubmit } = useForm();
 
-    const onSubmit = async (data) => {
-        const formData = new FormData();
-        formData.append("file", data.file[0]);
+  const onSubmit = async data => {
+    const formData = new FormData();
+    formData.append('file', data.file[0]);
 
-        const res = await fetch("http://localhost:5000/upload-file", {
-            method: "POST",
-            body: formData,
-        }).then((res) => res.json());
-        alert(JSON.stringify(`${res.message}, status: ${res.status}`));
-    };
+    const res = await fetch('http://localhost:5000/upload-file', {
+      method: 'POST',
+      body: formData,
+    }).then(res => res.json());
+    alert(JSON.stringify(`${res.message}, status: ${res.status}`));
+  };
 
   return (
     <>
@@ -70,13 +70,13 @@ function App() {
           <WalletProvider wallets={wallets} autoConnect>
             <WalletModalProvider>
               <Home>
-              <div className="App">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <input type="file" {...register("file")} />
+                <div className="App">
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <input type="file" {...register('file')} />
 
-                  <input type="submit" />
-                </form>
-              </div>
+                    <input type="submit" />
+                  </form>
+                </div>
               </Home>
             </WalletModalProvider>
           </WalletProvider>

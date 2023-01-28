@@ -37,11 +37,6 @@ import { useForm } from 'react-hook-form';
 import AlertPop from './AlertPop';
 import Stats from './Stats';
 
-
-
-
-
-
 export default function Form() {
   const toast = useToast();
   const [data, setData] = useState();
@@ -59,7 +54,6 @@ export default function Form() {
       duration: 3000,
       isClosable: true,
     });
-    
 
     setData(data);
   };
@@ -113,13 +107,9 @@ export default function Form() {
                   maxLength: 80,
                 })}
               />
-              {errors.petname && (
-                <AlertPop title={errors.petname.message} />
-              )}
+              {errors.petname && <AlertPop title={errors.petname.message} />}
               <FormLabel as="legend">What kind of pet do you have?</FormLabel>
-              <RadioGroup isRequired 
-              {...register('animal')}
-              >
+              <RadioGroup isRequired {...register('animal')}>
                 <HStack spacing="30px">
                   <Radio value="Dog">Dog</Radio>
                   <Radio value="Cat">Cat</Radio>
@@ -142,7 +132,9 @@ export default function Form() {
                   maxLength: 100,
                 })}
               />
-              {errors.birthdate && <AlertPop title={errors.birthdate.message} />}
+              {errors.birthdate && (
+                <AlertPop title={errors.birthdate.message} />
+              )}
               <FormLabel color="#6D5D5D">What's your pet's breed?</FormLabel>
               <Input
                 type="text"
@@ -155,7 +147,9 @@ export default function Form() {
               />
               {errors.breed && <AlertPop title={errors.breed.message} />}
               <FormControl>
-                <FormLabel color="#6D5D5D" textAlign="center">Microchip No.</FormLabel>
+                <FormLabel color="#6D5D5D" textAlign="center">
+                  Microchip No.
+                </FormLabel>
                 <Input
                   type="number"
                   min={10}
@@ -163,8 +157,12 @@ export default function Form() {
                   color="black"
                   {...register('microchip')}
                 />
-                {errors.microchip && <AlertPop title={errors.microchip.message} />}
-                <FormLabel color="#6D5D5D" textAlign="center">Rabies ID</FormLabel>
+                {errors.microchip && (
+                  <AlertPop title={errors.microchip.message} />
+                )}
+                <FormLabel color="#6D5D5D" textAlign="center">
+                  Rabies ID
+                </FormLabel>
                 <Input
                   type="text"
                   min={10}
@@ -175,20 +173,21 @@ export default function Form() {
                 {errors.rabies && <AlertPop title={errors.rabies.message} />}
               </FormControl>
               <VStack mt="10px">
-              <FormLabel color="#6D5D5D" textAlign="center">Upload a photo</FormLabel>
+                <FormLabel color="#6D5D5D" textAlign="center">
+                  Upload a photo
+                </FormLabel>
                 <Input
                   isRequired
                   bg="grey.500"
                   color="white"
                   borderRadius={10}
-                 
                   textAlign="center"
                   type="file"
                   // {...register('picture', {
                   //   required: 'Please upload a photo',
                   // })}
                 />
-                
+
                 <Button
                   bg="#C92BF7"
                   type="submit"
