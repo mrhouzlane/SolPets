@@ -1,89 +1,48 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import {
-  ChakraProvider,
-  theme as baseTheme,
-  extendTheme,
-} from '@chakra-ui/react';
-import * as web3 from '@solana/web3.js';
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from '@solana/wallet-adapter-react';
-import {
-  getPhantomWallet,
-  getSolflareWallet,
-  getSolletWallet,
-  getSolletExtensionWallet,
-  getLedgerWallet,
-} from '@solana/wallet-adapter-wallets';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import Home from './components/home';
-import { useForm } from 'react-hook-form';
+import express from 'express';
+import fileupload from 'express-fileupload';
+import cors from 'cors';
 
-require('@solana/wallet-adapter-react-ui/styles.css');
+const app = express();
 
-function App() {
-  const network = 'devnet';
-  const endpoint = web3.clusterApiUrl(network);
-  const wallets = useMemo(
-    () => [
-      getPhantomWallet(),
-      getSolflareWallet(),
-      getSolletWallet({ network }),
-      getSolletExtensionWallet({ network }),
-      getLedgerWallet(),
-    ],
-    [network]
-  );
+app.use(
+  fileupload({
+    createParentPath: true,
+  })
+);
 
-  const theme = extendTheme({
-    fonts: {
-      heading: 'Montserrat',
-      Body: 'Inter',
-    },
-    colors: {
-      brand: {
-        100: 'linear-gradient(144deg, #242038 20%, #522DA9 80%, #432C87)',
-        // ...
-        900: '#1a202c',
-      },
-    },
-  });
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-  const { register, handleSubmit } = useForm();
+app.post('/upload-file', async (req, res) => {
+  try {
+    if (!req.files) {
+      res.send({
+        status: 'failed',
+        message: 'No file uploaded',
+      });
+    } else {
+      let file = req.files.file;
 
-  const onSubmit = async data => {
-    const formData = new FormData();
-    formData.append('file', data.file[0]);
+      console.log(req.files);
 
-    const res = await fetch('http://localhost:5000/upload-file', {
-      method: 'POST',
-      body: formData,
-    }).then(res => res.json());
-    alert(JSON.stringify(`${res.message}, status: ${res.status}`));
-  };
+      file.mv('./uploads/' + file.name);
 
-  return (
-    <>
-      <ChakraProvider theme={theme}>
-        <ConnectionProvider endpoint={endpoint}>
-          <WalletProvider wallets={wallets} autoConnect>
-            <WalletModalProvider>
-              <Home>
-                <div className="App">
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <input type="file" {...register('file')} />
+      res.send({
+        status: 'success',
+        message: 'File is uploaded',
+        data: {
+          name: file.name,
+          mimetype: file.mimetype,
+          size: file.size,
+        },
+      });
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 
-                    <input type="submit" />
-                  </form>
-                </div>
-              </Home>
-            </WalletModalProvider>
-          </WalletProvider>
-        </ConnectionProvider>
-      </ChakraProvider>
-    </>
-  );
-}
+const port = process.env.PORT || 5000;
 
-export default App;
+app.listen(port, () => console.log(`Server started on port ${port}`));
