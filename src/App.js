@@ -16,18 +16,11 @@ import {
   getSolletExtensionWallet,
   getLedgerWallet,
 } from '@solana/wallet-adapter-wallets';
-import {
-  WalletModalProvider,
-} from '@solana/wallet-adapter-react-ui';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import Home from './components/home';
-
+import { useForm } from "react-hook-form";
 
 require('@solana/wallet-adapter-react-ui/styles.css');
-
-
-
-
-
 
 function App() {
   const network = 'devnet';
@@ -42,32 +35,53 @@ function App() {
     ],
     [network]
   );
-  
+
   const theme = extendTheme({
     fonts: {
-      heading:'Montserrat',
+      heading: 'Montserrat',
       Body: 'Inter',
     },
     colors: {
       brand: {
-        100: "linear-gradient(144deg, #242038 20%, #522DA9 80%, #432C87)",
+        100: 'linear-gradient(144deg, #242038 20%, #522DA9 80%, #432C87)',
         // ...
-        900: "#1a202c",
+        900: '#1a202c',
       },
     },
-  })
+  });
+
+  const { register, handleSubmit } = useForm();
+
+    const onSubmit = async (data) => {
+        const formData = new FormData();
+        formData.append("file", data.file[0]);
+
+        const res = await fetch("http://localhost:5000/upload-file", {
+            method: "POST",
+            body: formData,
+        }).then((res) => res.json());
+        alert(JSON.stringify(`${res.message}, status: ${res.status}`));
+    };
 
   return (
     <>
-    <ChakraProvider theme={theme}>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider>
-            <Home></Home>
-          </WalletModalProvider>
-        </WalletProvider>
-      </ConnectionProvider>
-    </ChakraProvider>
+      <ChakraProvider theme={theme}>
+        <ConnectionProvider endpoint={endpoint}>
+          <WalletProvider wallets={wallets} autoConnect>
+            <WalletModalProvider>
+              <Home>
+              <div className="App">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <input type="file" {...register("file")} />
+
+                  <input type="submit" />
+                </form>
+              </div>
+              </Home>
+            </WalletModalProvider>
+          </WalletProvider>
+        </ConnectionProvider>
+      </ChakraProvider>
     </>
   );
 }

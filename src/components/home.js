@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
-import { 
+import {
   ChakraProvider,
   Box,
   Flex,
@@ -21,7 +21,7 @@ import {
   FormControl,
   FormLabel,
   Link,
- } from '@chakra-ui/react';
+} from '@chakra-ui/react';
 import phoneUI from '../assets/phoneUI.svg';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import {
@@ -44,11 +44,7 @@ import dogAndHuman from '../assets/dogAndHuman.svg';
 import dogProfile from '../assets/dogProfile.svg';
 import solanaVerticalLogo from '../assets/solanaVerticalLogo.svg';
 import { Greet } from '../Greet';
-import Form from '../components/LoginForm';
-
-
-
-
+import Form from './LoginForm';
 
 function WalletNotConnected() {
   return (
@@ -94,52 +90,48 @@ function useSolanaAccount() {
   return { account, transactions };
 }
 
-
-
 function Home() {
-    const { connection } = useConnection();
-    const { publicKey } = useWallet();
-    const { account, transactions } = useSolanaAccount();
-    const toast = useToast();
-    const [airdropProcessing, setAirdropProcessing] = useState(false);
-  
-    const getAirdrop = useCallback(async () => {
-      setAirdropProcessing(true);
-      try {
-        var airdropSignature = await connection.requestAirdrop(
-          publicKey,
-          web3.LAMPORTS_PER_SOL
-        );
-        await connection.confirmTransaction(airdropSignature);
-      } catch (error) {
-        console.log(error);
-        toast({ title: 'Airdrop failed', description: 'unknown error' });
-      }
-      setAirdropProcessing(false);
-    }, [toast, publicKey, connection]);
-  
-   
-    return (
-      <Box textAlign="left" fontSize="xl" bg="brand.100" >
-       
-          <Tabs variant="soft-rounded" colorScheme="pink" >
-            <TabList width="full">
-              <HStack justify="space-between" width="full" m="50px" >
-                <HStack>
-                  <Img src={logo} />
-                  <Tab>Home</Tab>
-                  <Tab>Transaction History</Tab>
-                </HStack>
-                <HStack>
-                  <WalletMultiButton />
-                  {publicKey && <WalletDisconnectButton bg="pink" />}
-                  <ColorModeSwitcher justifySelf="flex-end" />
-                </HStack>
-              </HStack>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                {/* {publicKey && (
+  const { connection } = useConnection();
+  const { publicKey } = useWallet();
+  const { account, transactions } = useSolanaAccount();
+  const toast = useToast();
+  const [airdropProcessing, setAirdropProcessing] = useState(false);
+
+  const getAirdrop = useCallback(async () => {
+    setAirdropProcessing(true);
+    try {
+      var airdropSignature = await connection.requestAirdrop(
+        publicKey,
+        web3.LAMPORTS_PER_SOL
+      );
+      await connection.confirmTransaction(airdropSignature);
+    } catch (error) {
+      console.log(error);
+      toast({ title: 'Airdrop failed', description: 'unknown error' });
+    }
+    setAirdropProcessing(false);
+  }, [toast, publicKey, connection]);
+
+  return (
+    <Box textAlign="left" fontSize="xl" bg="brand.100">
+      <Tabs variant="soft-rounded" colorScheme="pink">
+        <TabList width="full">
+          <HStack justify="space-between" width="full" m="50px">
+            <HStack>
+              <Img src={logo} />
+              <Tab>Home</Tab>
+              <Tab>Transaction History</Tab>
+            </HStack>
+            <HStack>
+              <WalletMultiButton />
+              {publicKey && <WalletDisconnectButton bg="pink" />}
+              <ColorModeSwitcher justifySelf="flex-end" />
+            </HStack>
+          </HStack>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            {/* {publicKey && (
                   <SimpleGrid columns={2} spacing={10}>
                     <VStack spacing={8} borderRadius={10} borderWidth={2} p={10}>
                       <FormControl id="pubkey">
@@ -171,61 +163,83 @@ function Home() {
                     </VStack>
                   </SimpleGrid>
                 )} */}
-                <Box as="section" className='header' mt="170" >
-                  <Flex>
-                    <Box width="700px"  >
-                      <Img src={phoneUI} />
+            <Box as="section" className="header" mt="170">
+              <Flex>
+                <Box width="700px">
+                  <Img src={phoneUI} />
+                </Box>
+                <Stack>
+                  <VStack justifyContent="space-evenly" align="left">
+                    <Heading
+                      as="h1"
+                      size="lg"
+                      fontSize="60px"
+                      fontWeight="600"
+                      mb="10"
+                    >
+                      A Passport NFT for your pet
+                    </Heading>
+                    <Box maxWidth="750px" pb="10" align="left">
+                      <Text fontSize="24px" fontWeight="400">
+                        Create a profile for your pet and we'll convert your
+                        pets information into a personalized NFT you can use to
+                        show proof-of-ownership and proof-of-records.
+                      </Text>
                     </Box>
-                    <Stack>
-                      <VStack justifyContent="space-evenly" align="left" >
-                        <Heading as="h1" size="lg" fontSize='60px' fontWeight="600" mb="10" >A Passport NFT for your pet</Heading>
-                        <Box maxWidth="750px" pb="10" align="left" >
-                          <Text fontSize="24px" fontWeight="400" >Create a profile for your pet and we'll convert your pets information into a personalized NFT you can use to show proof-of-ownership and proof-of-records.</Text>
-                        </Box>
-                          <Button w="120px"> Get Started </Button>
-                      </VStack>
-                    </Stack>
-                    <Box flex="1" align="right" width="500px" >
-                    <Img src={solanaShape} position="relative" top="-200px" right="-20px"/>
-                    </Box>
-                  </Flex>
+                    <Button w="120px"> Get Started </Button>
+                  </VStack>
+                </Stack>
+                <Box flex="1" align="right" width="500px">
+                  <Img
+                    src={solanaShape}
+                    position="relative"
+                    top="-200px"
+                    right="-20px"
+                  />
                 </Box>
-                <Box as="section" className='main'>
-                  <Flex flexDirection={["column", "row"]} justifyContent="center" position="relative" align="center">
-                    <Img src={dogAndHuman} boxSize="500px" />
-                    <Img src={dogProfile} boxSize="800px" />
-                  </Flex>
-                </Box>
-                <Box as="section" className="footer" >
-                  <Flex justifyContent="center" >
-                    <Img src={solanaVerticalLogo} />
-                  </Flex>
-                  
-                </Box>
-              </TabPanel>
-              <TabPanel>
-                <LoginForm />
-                {publicKey && (
-                  <VStack spacing={8}>
-                    <Heading>Transaction History</Heading>
-                    {transactions && (
-                      <VStack>
-                        {transactions.map((v, i, arr) => (
-                          <HStack key={'transaction-' + i}>
-                            <Text>Signature: </Text>
-                            <Code>{v.signature}</Code>
-                          </HStack>
-                        ))}
-                      </VStack>
-                    )}
+              </Flex>
+            </Box>
+            <Box as="section" className="main">
+              <Flex
+                flexDirection={['column', 'row']}
+                justifyContent="center"
+                position="relative"
+                align="center"
+              >
+                <Img src={dogAndHuman} boxSize="500px" />
+                <Img src={dogProfile} boxSize="800px" />
+              </Flex>
+            </Box>
+            <Box as="section" className="footer">
+              <Flex justifyContent="center">
+                <Img src={solanaVerticalLogo} />
+              </Flex>
+            </Box>
+          </TabPanel>
+          <TabPanel>
+            <Form />
+
+            {publicKey && (
+              <VStack spacing={8}>
+                <Heading>Transaction History</Heading>
+                {transactions && (
+                  <VStack>
+                    {transactions.map((v, i, arr) => (
+                      <HStack key={'transaction-' + i}>
+                        <Text>Signature: </Text>
+                        <Code>{v.signature}</Code>
+                      </HStack>
+                    ))}
                   </VStack>
                 )}
-                {!publicKey && <WalletNotConnected />}
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-      </Box>
-    );
-  }
+              </VStack>
+            )}
+            {!publicKey && <WalletNotConnected />}
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </Box>
+  );
+}
 
 export default Home;
