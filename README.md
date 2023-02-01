@@ -1,5 +1,5 @@
 
-# ETHCC Hackathon 2022 -- Debate3
+# Solana Hackathon 2023 -- SolPets 
 
 This is the official Solana Hackathon 2023 submission for our project SolPets 🌈. 
 
