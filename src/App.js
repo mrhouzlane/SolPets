@@ -70,13 +70,7 @@ function App() {
           <WalletProvider wallets={wallets} autoConnect>
             <WalletModalProvider>
               <Home>
-                <div className="App">
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <input type="file" {...register('file')} />
-
-                    <input type="submit" />
-                  </form>
-                </div>
+              
               </Home>
             </WalletModalProvider>
           </WalletProvider>
