@@ -42,11 +42,12 @@ import Stats from './Stats';
 
 
 
-
 export default function Form() {
-  const toast = useToast();
   const [data, setData] = useState();
-
+  const toast = useToast();
+  const imageRef = React.useRef(null);
+  const [image, setImage] = React.useState("");
+ 
   const {
     register,
     handleSubmit,
@@ -63,8 +64,27 @@ export default function Form() {
 
     setData(data);
   };
-  console.log(data);
-  console.log(errors);
+
+  function useDisplayImage() {
+    const [result, setResult] = React.useState("");
+    function uploader(e) {
+      const imageFile = e.target.files[0];
+
+      const reader = new FileReader();
+      reader.addEventListener("load", (e) => {
+        setResult(e.target.result);
+      });
+
+      reader.readAsDataURL(imageFile);
+    }
+
+    return { result, uploader };
+  }
+
+  const { result, uploader } = useDisplayImage();
+
+  // console.log(data);
+  // console.log(errors);
   return (
     <>
       <VStack
@@ -178,8 +198,8 @@ export default function Form() {
                 />
                 {errors.rabies && <AlertPop title={errors.rabies.message} />}
               </FormControl>
-              <VStack mt="10px">
-                <FormLabel color="#6D5D5D" textAlign="center">
+              <VStack mt="20px" >
+                <FormLabel color="#6D5D5D" >
                   Upload a photo
                 </FormLabel>
                 <Input
@@ -189,11 +209,13 @@ export default function Form() {
                   borderRadius={10}
                   textAlign="center"
                   type="file"
-                  // {...register('picture', {
-                  //   required: 'Please upload a photo',
-                  // })}
+                  onChange={(e) => {
+                    setImage(e.target.file[0]);
+                    uploader(e);
+                  }}
+                  {...register('picture')}
                 />
-
+                {result && <img ref={imageRef} src={result} alt="" />}
                 <Button
                   bg="#C92BF7"
                   type="submit"

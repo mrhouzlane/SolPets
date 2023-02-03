@@ -21,6 +21,8 @@ import {
   FormControl,
   FormLabel,
   Link,
+  VisuallyHidden, 
+  VisuallyHiddenInput,
 } from '@chakra-ui/react';
 import phoneUI from '../assets/phoneUI.svg';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
@@ -45,6 +47,7 @@ import dogProfile from '../assets/dogProfile.svg';
 import solanaVerticalLogo from '../assets/solanaVerticalLogo.svg';
 import { Greet } from '../Greet';
 import Form from './LoginForm';
+
 
 function WalletNotConnected() {
   return (
@@ -96,6 +99,7 @@ function Home() {
   const { account, transactions } = useSolanaAccount();
   const toast = useToast();
   const [airdropProcessing, setAirdropProcessing] = useState(false);
+  
 
   const getAirdrop = useCallback(async () => {
     setAirdropProcessing(true);
@@ -112,15 +116,18 @@ function Home() {
     setAirdropProcessing(false);
   }, [toast, publicKey, connection]);
 
+
+
+
   return (
     <Box textAlign="left" fontSize="xl" bg="brand.100">
-      <Tabs variant="soft-rounded" colorScheme="pink">
+      <Tabs variant="soft-rounded" colorScheme="pink" >
         <TabList width="full">
           <HStack justify="space-between" width="full" m="50px">
             <HStack>
-              <Img src={logo} />
-              <Tab>Home</Tab>
-              <Tab>Transaction History</Tab>
+              <a href="./App.js"><Img src={logo} /></a>
+              <VisuallyHidden><Tab>Home</Tab></VisuallyHidden>
+              <Tab >Start here</Tab>
             </HStack>
             <HStack>
               <WalletMultiButton />
@@ -131,7 +138,7 @@ function Home() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            {/* {publicKey && (
+            {publicKey && (
                   <SimpleGrid columns={2} spacing={10}>
                     <VStack spacing={8} borderRadius={10} borderWidth={2} p={10}>
                       <FormControl id="pubkey">
@@ -162,7 +169,7 @@ function Home() {
                       <Greet />
                     </VStack>
                   </SimpleGrid>
-                )} */}
+                )}
             <Box as="section" className="header" mt="170">
               <Flex>
                 <Box width="700px">
@@ -186,7 +193,9 @@ function Home() {
                         show proof-of-ownership and proof-of-records.
                       </Text>
                     </Box>
-                    <Button w="120px"> Get Started </Button>
+                    <Link>
+                      <Button w="120px" > Get Started </Button>
+                    </Link>
                   </VStack>
                 </Stack>
                 <Box flex="1" align="right" width="500px">
@@ -217,11 +226,13 @@ function Home() {
             </Box>
           </TabPanel>
           <TabPanel>
+          {publicKey && (
             <Form />
-
+            )}
+          
             {publicKey && (
               <VStack spacing={8}>
-                <Heading>Transaction History</Heading>
+                <Heading>transaction history</Heading>
                 {transactions && (
                   <VStack>
                     {transactions.map((v, i, arr) => (
