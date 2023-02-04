@@ -241,7 +241,7 @@ export default function Form() {
           </form>
         </Stack>
         {data && (
-          <>
+          
           <Stats
             Petname={data.petname}
             Animal={data.animal}
@@ -251,8 +251,7 @@ export default function Form() {
             Rabies={data.rabies}
             Picture={data.picture}
           />
-          <NFT />
-          </>
+          
         )}
         {picture && (<img id="target" className="image" src={picture} alt="preview image" />)}
        

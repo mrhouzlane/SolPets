@@ -1,31 +1,17 @@
 import {
-    Heading,
-    HStack,
-    Stack,
-    Card,
-    CardBody,
-    Image,
-    Text,
-    Divider,
-    CardFooter,
-    Button,
-    ButtonGroup,
-    CardHeader,
+    Stat,
+    StatLabel,
+    StatNumber,
+    StatHelpText,
   } from '@chakra-ui/react';
   import React from 'react';
   
   export default function NFT(props) {
     return (
-        <Card align='center'>
-  <CardHeader>
-    <Heading size='md'> Customer dashboard</Heading>
-  </CardHeader>
-  <CardBody>
-    <Text>View a summary of all your customers over the last month.</Text>
-  </CardBody>
-  <CardFooter>
-    <Button colorScheme='blue'>View here</Button>
-  </CardFooter>
-</Card>
+        <Stat>
+            <StatLabel>Collected Fees</StatLabel>
+            <StatNumber>£0.00</StatNumber>
+            <StatHelpText>Feb 12 - Feb 28</StatHelpText>
+        </Stat>
     );
   }
