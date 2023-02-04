@@ -5,7 +5,6 @@ import {
   SimpleGrid,
   VStack,
   Input,
-  FormHelperText,
   Box,
   Heading,
   Text,
@@ -13,29 +12,16 @@ import {
   HStack,
   RadioGroup,
   Radio,
-  NumberInput,
-  NumberInputField,
   Button,
-  Flex,
   Link,
-  ButtonGroup,
-  IconButton,
-  AddIcon,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Lorem,
-  ModalFooter,
   useToast,
 } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext, useController } from 'react-hook-form';
 import AlertPop from './AlertPop';
 import Stats from './Stats';
+import NFT from './NFT';
+
 
 
 
@@ -43,17 +29,36 @@ import Stats from './Stats';
 
 
 export default function Form() {
-  const [data, setData] = useState();
+  const [data, setData] = useState(); 
   const toast = useToast();
-  const imageRef = React.useRef(null);
-  const [image, setImage] = React.useState("");
- 
+  const [picture, setPicture] = useState();
+  
+  
   const {
     register,
     handleSubmit,
+    reset,
+    formState,
     formState: { errors },
   } = useForm();
-  const onSubmit = data => {
+
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("file", data.picture[0]);
+    formData.append("petname", data.petname);
+    formData.append("birthday", data.birthdate);
+    formData.append("animal", data.animal);
+
+
+    const res = await fetch("http://localhost:5000/upload-file", {
+      method: "POST",
+      body: formData,
+    }).then((res) => res.json());
+  
+    alert(JSON.stringify(`${res.message}, status ${res.status}`));
+    console.log(setPicture(URL.createObjectURL(data.picture[0])));
+    setData([data])
     //console.log(data);
     toast({
       title: 'Submitted!',
@@ -62,28 +67,23 @@ export default function Form() {
       isClosable: true,
     });
 
-    setData(data);
+
+    console.log(data)
+    console.log(data.picture[0])
+    
   };
 
-  function useDisplayImage() {
-    const [result, setResult] = React.useState("");
-    function uploader(e) {
-      const imageFile = e.target.files[0];
-
-      const reader = new FileReader();
-      reader.addEventListener("load", (e) => {
-        setResult(e.target.result);
-      });
-
-      reader.readAsDataURL(imageFile);
+  const onImageChange = (event) => {
+    event.preventDefault();
+    console.log("event", event)
+    if (event.target.picture && event.target.picture[0]) {
+      setPicture(URL.createObjectURL(event.target.picture[0]));
     }
+  
+  };
+ 
 
-    return { result, uploader };
-  }
 
-  const { result, uploader } = useDisplayImage();
-
-  // console.log(data);
   // console.log(errors);
   return (
     <>
@@ -127,6 +127,7 @@ export default function Form() {
                 borderColor="#B8B5B5"
                 color="black"
                 placeholder="What's your pet's name?"
+                name="petname"
                 {...register('petname', {
                   required: "Please enter your pet's name",
                   minLength: 2,
@@ -151,6 +152,7 @@ export default function Form() {
                 type="date"
                 borderColor="#B8B5B5"
                 color="black"
+                name="birthdate"
                 placeholder="When is your pet's birthdate?"
                 {...register('birthdate', {
                   required: 'Please enter your pets birthday',
@@ -167,6 +169,7 @@ export default function Form() {
                 borderColor="#B8B5B5"
                 color="black"
                 placeholder="What's your pet's breed?"
+                name="breed"
                 {...register('breed', {
                   required: "Please enter your pet's breed",
                 })}
@@ -181,6 +184,7 @@ export default function Form() {
                   min={10}
                   borderColor="#B8B5B5"
                   color="black"
+                  name="microchip"
                   {...register('microchip')}
                 />
                 {errors.microchip && (
@@ -194,6 +198,7 @@ export default function Form() {
                   min={10}
                   borderColor="#B8B5B5"
                   color="black"
+                  name="rabies"
                   {...register('rabies')}
                 />
                 {errors.rabies && <AlertPop title={errors.rabies.message} />}
@@ -204,18 +209,21 @@ export default function Form() {
                 </FormLabel>
                 <Input
                   isRequired
-                  bg="grey.500"
-                  color="white"
+                  accept="image/*"
+                  bg=""
+                  color="black"
                   borderRadius={10}
                   textAlign="center"
                   type="file"
-                  onChange={(e) => {
-                    setImage(e.target.file[0]);
-                    uploader(e);
-                  }}
-                  {...register('picture')}
+                  name='picture'
+                  className="image"
+                  onChange={onImageChange}
+                  {...register('picture', {
+                    required: true
+                  })}
+                  
                 />
-                {result && <img ref={imageRef} src={result} alt="" />}
+                {errors.picture && <AlertPop title={errors.picture.message} />}
                 <Button
                   bg="#C92BF7"
                   type="submit"
@@ -233,6 +241,7 @@ export default function Form() {
           </form>
         </Stack>
         {data && (
+          <>
           <Stats
             Petname={data.petname}
             Animal={data.animal}
@@ -242,7 +251,11 @@ export default function Form() {
             Rabies={data.rabies}
             Picture={data.picture}
           />
+          <NFT />
+          </>
         )}
+        {picture && (<img id="target" className="image" src={picture} alt="preview image" />)}
+       
       </SimpleGrid>
     </>
   );

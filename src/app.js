@@ -22,6 +22,8 @@ import { useForm } from 'react-hook-form';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
+
+
 function App() {
   const network = 'devnet';
   const endpoint = web3.clusterApiUrl(network);
@@ -50,18 +52,7 @@ function App() {
     },
   });
 
-  const { register, handleSubmit } = useForm();
-
-  const onSubmit = async data => {
-    const formData = new FormData();
-    formData.append('file', data.file[0]);
-
-    const res = await fetch('http://localhost:5000/upload-file', {
-      method: 'POST',
-      body: formData,
-    }).then(res => res.json());
-    alert(JSON.stringify(`${res.message}, status: ${res.status}`));
-  };
+ 
 
   return (
     <>
@@ -70,7 +61,7 @@ function App() {
           <WalletProvider wallets={wallets} autoConnect>
             <WalletModalProvider>
               <Home>
-              
+               
               </Home>
             </WalletModalProvider>
           </WalletProvider>

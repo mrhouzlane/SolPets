@@ -221,7 +221,7 @@ function Home() {
             </Box>
             <Box as="section" className="footer">
               <Flex justifyContent="center">
-                <Img src={solanaVerticalLogo} />
+                {/* <Img src={solanaVerticalLogo} /> */}
               </Flex>
             </Box>
           </TabPanel>
