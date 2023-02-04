@@ -25,7 +25,9 @@ Those deployments were done using .......
 
 ## UI Wireframes 
 
-We were inspired to make a website that would be easy to navigate and accessible to anyone. We also wanted the site to resonate with the Solana community and kept it on-brand and consistent with solana branded colors.  
+We were inspired to make a website that would be easy to navigate and accessible to anyone. We also wanted the site to resonate with the Solana community and kept it on-brand and consistent with solana branded colors.
+
+
  ![UIWireframes](./src/assets/UIWireframes.PNG)
 
 
