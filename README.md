@@ -13,11 +13,6 @@ SolPets is a pet verification platform that turns your pet's information into a 
 - Trade or sell NFTs to earn tokens
 
 
-UI Wireframes: 
-
-We were inspired to make a website that would be easy to navigate and accessible to anyone. We also wanted the site to resonate with the Solana community and kept it on-brand and consistent with solana branded colors.  
- ![UIWireframes](./src/assets/UIWireframes.PNG)
-
 Deployed contracts : 
 
 - [PolygonMumbai](https://mumbai.polygonscan.com/) 
@@ -28,14 +23,20 @@ Deployed contracts :
 
 Those deployments were done using .......
 
+## UI Wireframes 
+
+We were inspired to make a website that would be easy to navigate and accessible to anyone. We also wanted the site to resonate with the Solana community and kept it on-brand and consistent with solana branded colors.  
+ ![UIWireframes](./src/assets/UIWireframes.PNG)
+
+
+
+
 ## How it Works
 
 1. Connect to your wallet 
 2. Fill out a form with your pets information
 3. Review your pet's passport to make sure everything is accurate
 4. Mint
-
-
 
 
 
