@@ -23,6 +23,8 @@ import {
   Link,
   VisuallyHidden, 
   VisuallyHiddenInput,
+  FaFacebook,
+  FaTwitter,
 } from '@chakra-ui/react';
 import phoneUI from '../assets/phoneUI.svg';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
@@ -121,13 +123,15 @@ function Home() {
 
   return (
     <Box textAlign="left" fontSize="xl" bg="brand.100">
-      <Tabs variant="soft-rounded" colorScheme="pink" >
+      <Tabs variant="soft-rounded" colorScheme="purple" >
         <TabList width="full">
           <HStack justify="space-between" width="full" m="50px">
-            <HStack>
+              <HStack >
               <a href="./App.js"><Img src={logo} /></a>
+              </HStack>
+              <HStack flex="1" pl="50px">
               <VisuallyHidden><Tab>Home</Tab></VisuallyHidden>
-              <Tab >Start here</Tab>
+              <Tab backgroundColor="purple.500" color="white" >Start here</Tab>
             </HStack>
             <HStack>
               <WalletMultiButton />
@@ -138,38 +142,6 @@ function Home() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            {publicKey && (
-                  <SimpleGrid columns={2} spacing={10}>
-                    <VStack spacing={8} borderRadius={10} borderWidth={2} p={10}>
-                      <FormControl id="pubkey">
-                        <FormLabel>Wallet Public Key</FormLabel>
-                        <Input
-                          type="text"
-                          value={publicKey.toBase58()}
-                          readOnly
-                        />
-                      </FormControl>
-                      <FormControl id="balance">
-                        <FormLabel>Balance</FormLabel>
-                        <Input
-                          type="text"
-                          value={
-                            account
-                              ? account.lamports / web3.LAMPORTS_PER_SOL + ' SOL'
-                              : 'Loading..'
-                          }
-                          readOnly
-                        />
-                      </FormControl>
-                      <Button onClick={getAirdrop} isLoading={airdropProcessing}>
-                        Get Airdrop of 1 SOL
-                      </Button>
-                    </VStack>
-                    <VStack>
-                      <Greet />
-                    </VStack>
-                  </SimpleGrid>
-                )}
             <Box as="section" className="header" mt="170">
               <Flex>
                 <Box width="700px">
@@ -193,7 +165,7 @@ function Home() {
                         show proof-of-ownership and proof-of-records.
                       </Text>
                     </Box>
-                    <Link>
+                    <Link to='./LoginForm.jsx'>
                       <Button w="120px" > Get Started </Button>
                     </Link>
                   </VStack>
@@ -227,7 +199,39 @@ function Home() {
           </TabPanel>
           <TabPanel>
           {publicKey && (
+            <>
             <Form />
+            <SimpleGrid columns={2} spacing={10}>
+            <VStack spacing={8} borderRadius={10} borderWidth={2} p={10}>
+              <FormControl id="pubkey">
+                <FormLabel>Wallet Public Key</FormLabel>
+                <Input
+                  type="text"
+                  value={publicKey.toBase58()}
+                  readOnly
+                />
+              </FormControl>
+              <FormControl id="balance">
+                <FormLabel>Balance</FormLabel>
+                <Input
+                  type="text"
+                  value={
+                    account
+                      ? account.lamports / web3.LAMPORTS_PER_SOL + ' SOL'
+                      : 'Loading..'
+                  }
+                  readOnly
+                />
+              </FormControl>
+              <Button onClick={getAirdrop} isLoading={airdropProcessing}>
+                Get Airdrop of 1 SOL
+              </Button>
+            </VStack>
+            <VStack>
+              <Greet />
+            </VStack>
+          </SimpleGrid>
+          </>
             )}
           
             {publicKey && (
