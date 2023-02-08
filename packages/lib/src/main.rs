@@ -61,6 +61,26 @@ pub fn update_pet_data(pet_pubkey: &Pubkey, new_data: PetData) -> ContractResult
 }
 
 #[entrypoint]
+pub fn burn(pubkey: Pubkey) -> ContractResult {
+    let caller = solanalib::get_caller();
+    let pet_data = solanalib::get_nft::<PetData>(PET_NFT_PRGRAM_ID, &pubkey)?;
+    solanalib::require(pet_data.owner == caller, "Only the owner can burn the NFT");
+    solanalib::burn_nft(PET_NFT_PRGRAM_ID, &pubkey)?
+
+
+#[entrypoint]
+pub fn transfer_ownership(pubkey: Pubkey, new_owner: Pubkey) -> ContractResult {
+    let caller = solanalib::get_caller();
+    let pet_data = solanalib::get_nft::<PetData>(PET_NFT_PRGRAM_ID, &pubkey)?;
+    solanalib::require(pet_data.owner == caller, "Only the owner can transfer ownership");
+    solanalib::transfer_nft(PET_NFT_PRGRAM_ID, &pubkey, &new_owner)?;
+    let mut pet_data = pet_data;
+    pet_data.owner = new_owner;
+    solanalib::set_nft(PET_NFT_PRGRAM_ID, &pubkey, &pet_data)?;
+    Ok(())
+}
+
+#[entrypoint]
 pub fn donate_to_pet(pet_pubkey: &Pubkey, amount: u64) -> ContractResult {
     let account_info = solanalib::get_account_info(pet_pubkey)?;
     let mut pet_data: PetData = solanalib::deserialize(&account_info.data).unwrap();
