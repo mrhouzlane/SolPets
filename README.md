@@ -15,13 +15,10 @@ SolPets is a pet verification platform that turns your pet's information into a 
 
 Deployed contracts : 
 
-- [PolygonMumbai](https://mumbai.polygonscan.com/) 
-- [CronosTestnet](https://cronos.org/docs/getting-started/cronos-testnet.html) 
-- [GnosisTesnet (sokol)](https://blockscout.com/xdai/testnet) 
-- [CeloTesnet (Alfajores)](https://alfajores-blockscout.celo-testnet.org/) 
-- [NeonTestnet](https://neon-labs.org/)
+- [Devnet](www.google.com) 
 
-Those deployments were done using .......
+Those deployment were done with ```solana-sdk``` . 
+
 
 ## UI Wireframes 
 
