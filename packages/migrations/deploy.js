@@ -1,40 +1,37 @@
-const {TransferTransaction, TransactionEncoder} = require("@solana/web3.js");
-const { BN } = require("bn.js");
-const { publicKey, secretKey } = require("@solana/web3.js/src/wallet");
-const { Connection } = require("@solana/web3.js");
-const { createAccountWithLamports} = require("@solana/web3.js/src/utils");
-
-
-const connection = new Connection("http://api.solana.com");
-
-async function deploy() {
-    const sourceKeypair = new secretKey(Buffer.from("your secret key", "hex"));
-    const sourcePubkey = publicKey(sourceKeypair.publicKey());
-
+const {
+    Contract,
+    Wallet,
+    Signer,
+    createAccount,
+    PublicKey,
+  } = require("@solana/web3.js");
+  const fs = require("fs");
+  
+  async function deploy() {
+    const connection = new solana.Connection(<YOUR_NODE_URL>);
+    const wallet = new Wallet();
+    const signer = await wallet.addKey(<YOUR_SEED>);
+    const contractProgramId = await connection.getProgramId(
+      fs.readFileSync(<COMPILED_WASM_FILE>)
+    );
+  
+    const newAccount = await createAccount(connection, signer);
+    console.log("Deploying contract to:", newAccount.publicKey.toBase58());
+  
+    const contract = new Contract({
+      programId: contractProgramId,
+      signer: signer,
+      wallet: wallet,
+    });
+  
+    // Call the contract's mint function with the required pet data
     const petData = {
-        historyOfVaccination: [1, 2, 3],
-        needsHelp:true,
+      history_of_vaccination: [123456789, 987654321],
+      needs_help: true,
     };
-
-    //create the NFT on the blockchain 
-    const result = await connection.requestAirdrop(sourcePubkey, 1000000000);
-    console.log("Airdrop Result: ", result);
-
-    const nftPubkey = new publicKey();
-    const nftKeypair = new secretKey();
-
-    const nftTransaction = new TransferTransaction();
-    nftTransaction.addData(Buffer.from("mint"), "utf-8");
-    nftTransaction.addData(nftPubkey.toBuffer());
-    nftTransaction.addData(Buffer.from(JSON.stringify(petData)), "utf-8");
-
-    nftTransaction.addSigner(sourceKeypair);
-
-    const nftTransactionEncoded = TransactionEncoder.encod(nftTransaction);
-
-    // Deploy the transaction
-    await connection.sendTransaction(nftTransactionEncoded);
-    console.log("NFT deployed");
-}
-
-deploy();
+    const response = await contract.mint(petData);
+  
+    console.log("Mint NFT response:", response);
+  }
+  
+  deploy();
