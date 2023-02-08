@@ -21,6 +21,7 @@ The Smart Contracts have these propreties :
 - **VaccinationRecord**
 - **HealthInformation**
 - **donate_to_pet**
+- **Token Ownership / Burning** 
 
 Deployed contracts :
 
